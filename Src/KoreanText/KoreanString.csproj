@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KoreanText</RootNamespace>
     <AssemblyName>KoreanText</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,7 +49,6 @@
   <ItemGroup>
     <Compile Include="KoreanChar.cs" />
     <Compile Include="KoreanString.cs" />
-    <Compile Include="KoreanStringMatch.cs" />
     <Compile Include="KoreanStringTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

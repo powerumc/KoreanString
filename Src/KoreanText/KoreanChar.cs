@@ -1,160 +1,164 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace KoreanText
 {
-    public class KoreanChar : IEqualityComparer<KoreanChar>
+    public class KoreanChar
     {
 
-        public override int GetHashCode()
-        {
-            return CharK.GetHashCode();
-        }
-
-        public char CharK { get; private set; }
-        public Encoding CurrentEncoding { get; set; }
-
-        private readonly byte[] chardata = new byte[2];
-
-        public KoreanChar CharDepth1
-        {
-            get
-            {
-                if (this.chardata[0] == 49) return this.CharK; // 초성만 있음
-
-                var cindex = this.ToKoreanUniqueCode() - KoreanStringTable.GetIndexDepth3(this.CharDepth3);
-                cindex = (cindex / 28) - KoreanStringTable.GetIndexDepth2(this.CharDepth2);
-                cindex = cindex / 21;
-
-                return KoreanStringTable.GetIndex1(cindex);
-            }
-        }
-
-        public KoreanChar CharDepth2
-        {
-            get
-            {
-                var cindex = this.ToKoreanUniqueCode() - KoreanStringTable.GetIndexDepth3(this.CharDepth3);
-                cindex = (cindex / 28) % 21;
-
-                return KoreanStringTable.GetIndex2(cindex);
-            }
-        }
-        public KoreanChar CharDepth3
-        {
-            get
-            {
-                var cindex = this.ToKoreanUniqueCode() % 20;
-                return KoreanStringTable.GetIndex3(cindex);
-            }
-        }
+        private char mChar;
+        private byte[] mCharData;
 
         public KoreanChar(char c)
         {
-            this.CharK = c;
-            this.CurrentEncoding = Encoding.Default;
-
-            this.Init();
+            this.mChar = c;
+            this.init();
         }
 
         public KoreanChar(int i)
         {
-            this.CharK = Convert.ToChar(i);
-            this.Init();
+            this.mChar = (char)i;
+            this.init();
         }
 
-        public KoreanChar(params byte[] bdata)
+        /**
+         * 바이트로 분할하여 메모리에 push된 값을 swap하여 보관한다. 
+         */
+        private void init()
         {
-            this.chardata = bdata.Reverse().ToArray();
-            this.CharK = Encoding.Unicode.GetString(this.chardata).First();
+            this.mCharData = toBinaryNumber(this.mChar);
+            this.mCharData = swapBytes(this.mCharData);
         }
 
-        public KoreanChar(string hex)
-        {
-            this.chardata[1] = (byte)((Convert.ToInt32(new string(hex[0], 1), 16) << 4
-                                          | Convert.ToInt32(new string(hex[1], 1), 16)));
-
-
-            this.chardata[0] = (byte)((Convert.ToInt32(new string(hex[2], 1), 16) << 4
-                                          | Convert.ToInt32(new string(hex[3], 1), 16)));
-
-            this.CharK = Encoding.Unicode.GetString(this.chardata).First();
-        }
 
         public static implicit operator KoreanChar(char c)
         {
             return new KoreanChar(c);
         }
 
-        public static implicit operator KoreanChar(int i)
+        public char GetChar()
         {
-            return new KoreanChar(i);
+            return this.mChar;
         }
 
-
-        public void Init()
+        public byte[] GetBytes()
         {
-            var bdata = Encoding.Unicode.GetBytes(new char[] { this.CharK }).Reverse().ToArray();
-            var bdataIndexCount = bdata.Length - 1;
+            return this.mCharData;
+        }
 
-            for (int i = 0; i < bdata.Length; i++)
+        /**
+         * 한글 문자의 초성 반환합니다.
+         */
+        public KoreanChar GetChoSung()
+        {
+            var unicode = this.ToInt();
+            if (unicode >= KoreanStringTable.G.ToInt() && unicode <= KoreanStringTable.H.ToInt())
             {
-                this.chardata[i] = bdata[i];
+                return this;
             }
+
+            var index = this.ToKoreanUniqueCode();
+
+            return KoreanStringTable.GetIndex1(KoreanStringTable.GetIndexOnChoSung(index));
         }
 
-        public string ToUnicodeString()
+        /**
+         * 한글 문자의 중성을 반환합니다.
+         */
+        public KoreanChar GetJoongSung()
         {
-            return BitConverter.ToString(this.chardata).Replace("-", "");
+            var index = this.ToKoreanUniqueCode();
+
+            return KoreanStringTable.GetIndex2(KoreanStringTable.GetIndexOnJoongSung(index));
         }
 
-        public string ToBitsString()
+        /**
+         * 한글 문자의 종성을 반환합니다.
+         */
+        public KoreanChar GetJongSung()
         {
-            return Convert.ToString(this.CharK, 2);
+            var index = this.ToKoreanUniqueCode();
+
+            return KoreanStringTable.GetIndex3(KoreanStringTable.GetIndexOnJongSung(index));
+        }
+
+        private static byte[] toBinaryNumber(char c)
+        {
+            var data = Encoding.Unicode.GetBytes(c.ToString());
+
+            return data;
+        }
+
+        private static byte[] swapBytes(byte[] data)
+        {
+            var temp = new byte[data.Length];
+
+            for (var i = 0; i < data.Length; i++)
+            {
+                temp[i] = data[data.Length - i - 1];
+            }
+
+            return temp;
+        }
+
+        public long ToLong()
+        {
+            return (long)this.mChar;
+        }
+
+        public int ToInt()
+        {
+            return (int)this.mChar;
         }
 
         public byte[] ToBytes()
         {
-            return this.chardata;
-        }
-
-        public byte[] ToByteForMemCopy()
-        {
-            return this.chardata.Reverse().ToArray();
-        }
-
-        public int ToLong()
-        {
-            return Convert.ToInt32(this.CharK);
+            return this.mCharData;
         }
 
         public int ToKoreanUniqueCode()
         {
-            return this.ToLong() - KoreanStringTable.가.ToLong();
+            var unicode = this.ToInt();
+
+            return unicode - KoreanStringTable.Ga.ToInt();
         }
 
         public override string ToString()
         {
-            return new string(new char[] { this.CharK });
+            return Encoding.Unicode.GetString(swapBytes(this.mCharData));
         }
 
-
-        protected bool Equals(KoreanChar other)
+        public override int GetHashCode()
         {
-            return this.CharK == other.CharK;
+            if (this.mCharData.Length >= 2)
+                return this.mCharData[0] ^ this.mCharData[1];
+
+            return 1;
         }
 
-        public bool Equals(KoreanChar x, KoreanChar y)
+        public override bool Equals(object obj)
         {
-            return x.CharK == y.CharK;
+            return this.GetHashCode() == obj.GetHashCode();
         }
 
-        public int GetHashCode(KoreanChar obj)
+        public bool Contains(char c)
         {
-            return this.chardata[0] ^ this.chardata[1];
+            var kc = new KoreanChar(c);
+            var has = KoreanStringTable.GetIndexOnChoSung(this.GetChoSung().ToKoreanUniqueCode()) > 0 &&
+                      KoreanStringTable.GetIndexOnChoSung(kc.GetChoSung().ToKoreanUniqueCode()) > 0;
+            if (has && this.GetChoSung() != kc.GetChoSung()) return false;
+
+            has = KoreanStringTable.GetIndexOnJoongSung(this.GetJoongSung().ToInt()) > 0 &&
+                  KoreanStringTable.GetIndexOnJoongSung(kc.GetJoongSung().ToInt()) > 0;
+            if (has && this.GetJoongSung() != kc.GetJoongSung()) return false;
+
+            has = KoreanStringTable.GetIndexOnJongSung(this.GetJongSung().ToInt()) > 0 &&
+                  KoreanStringTable.GetIndexOnJongSung(kc.GetJongSung().ToInt()) > 0;
+            if (has && this.GetJongSung() != kc.GetJongSung()) return false;
+
+
+            return true;
         }
 
         public static bool operator ==(KoreanChar a, KoreanChar b)

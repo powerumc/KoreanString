@@ -1,33 +1,46 @@
-using System;
+Ôªøusing Microsoft.VisualStudio.TestTools.UnitTesting;
 using KoreanText;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace KoreanTest.Tests
+namespace KoreanText.Tests
 {
-    [TestClass]
+    [TestClass()]
     public class KoreanString_Tests
     {
-        [TestMethod]
-        public void TestMethod1()
+        [TestMethod()]
+        public void KoreanString_Test()
         {
-            var chars = new KoreanChar[]
-            {
-                new KoreanChar('æˆ'),
-                new KoreanChar('¡ÿ')
-            };
-            var str = new KoreanString(chars);
-            Console.WriteLine(str);
+            var ks = new KoreanString("ÏóÑÏ§ÄÏùº");
 
-            Assert.AreEqual(str.ToString(), "æˆ¡ÿ");
+            Console.WriteLine(ks.ToString());
         }
 
-        [TestMethod]
-        public void KoreanString_Implicit_Test()
+        [TestMethod()]
+        public void KoreanString_Test1()
         {
-            KoreanString str = "æˆ¡ÿ¿œ";
-            Console.Write(str);
+            Assert.Fail();
+        }
 
-            Assert.AreEqual(str.ToString(), "æˆ¡ÿ¿œ");
+        [TestMethod()]
+        public void GetHashCode_Test()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void Equals_Test()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ToString_Test()
+        {
+            Assert.Fail();
         }
     }
 }

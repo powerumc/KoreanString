@@ -50,9 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="KoreanChar_TestsUnitTest1.cs" />
-    <Compile Include="KoreanStringTable_Tests.cs" />
-    <Compile Include="KoreanStringMatch_Tests.cs" />
+    <Compile Include="KoreanChar_Tests.cs" />
     <Compile Include="KoreanString_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
