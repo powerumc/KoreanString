@@ -57,7 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\KoreanString\KoreanString.csproj">
+    <ProjectReference Include="..\KoreanText\KoreanString.csproj">
       <Project>{7aea2587-d4b4-4bf5-8cac-b5da1e822286}</Project>
       <Name>KoreanString</Name>
     </ProjectReference>

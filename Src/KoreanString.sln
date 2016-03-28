@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoreanString", "KoreanString.csproj", "{7AEA2587-D4B4-4BF5-8CAC-B5DA1E822286}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoreanString", "KoreanText\KoreanString.csproj", "{7AEA2587-D4B4-4BF5-8CAC-B5DA1E822286}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoreanString.Tests", "..\KoreanString.Tests\KoreanString.Tests.csproj", "{E7C7D1EC-9C2B-4CEE-BECB-ABCF17FAB13C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoreanString.Tests", "KoreanText.Tests\KoreanString.Tests.csproj", "{E7C7D1EC-9C2B-4CEE-BECB-ABCF17FAB13C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

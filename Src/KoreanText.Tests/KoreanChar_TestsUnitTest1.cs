@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace KoreanTest.Tests
 {
     [TestClass]
-    public class KoreanChar_TestsUnitTest1
+    public class KoreanChar_Tests
     {
         private const char testchar1 = '¾ö';
 
